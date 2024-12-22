@@ -16,7 +16,7 @@ public class MSSQLConnection {
             String dbUsername = DBConfiguration.getUsername();
             String dbPassword = DBConfiguration.getPassword();
 
-            System.out.println(dbPassword + dbUsername + dbUrl);
+            //System.out.println(dbPassword + dbUsername + dbUrl);
 
             return DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
         } catch (SQLException e) {
