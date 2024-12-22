@@ -41,6 +41,11 @@ public class DatabaseTests {
         dbSteps.insertWithTransactionAndValidate(); // Insert a row with transaction handling
     }
 
+    @Test
+    public void testUpdateLastNameAndValidate() {
+        dbSteps.updateLastNameAndValidate(1, "UpdatedName1");
+    }
+
     @AfterMethod
     public void tearDown() {
         dbSteps.closeConnection(); // Close the database connection after each test

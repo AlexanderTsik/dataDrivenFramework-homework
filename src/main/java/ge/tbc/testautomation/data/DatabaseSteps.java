@@ -180,6 +180,39 @@ public class DatabaseSteps {
         return this;
     }
 
+    // Update lastName of any registration and validate
+    public DatabaseSteps updateLastNameAndValidate(int id, String newLastName) {
+        try {
+            // Update the last name
+            String updateQuery = "UPDATE RegistrationData SET lastName = ? WHERE id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
+                preparedStatement.setString(1, newLastName);
+                preparedStatement.setInt(2, id);
+
+                int rowsAffected = preparedStatement.executeUpdate();
+                Assert.assertEquals(rowsAffected, 1, "Exactly one row should be updated");
+            }
+
+            // Validate the update
+            String validateQuery = "SELECT lastName FROM RegistrationData WHERE id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(validateQuery)) {
+                preparedStatement.setInt(1, id);
+
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    Assert.assertTrue(resultSet.next(), "Updated record should exist in the database");
+                    String actualLastName = resultSet.getString("lastName");
+                    Assert.assertEquals(actualLastName, newLastName, "Last name should match the updated value");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to update and validate last name", e);
+        }
+        return this;
+    }
+
+
+
+
     public void closeConnection() {
         try {
             if (connection != null) connection.close();
